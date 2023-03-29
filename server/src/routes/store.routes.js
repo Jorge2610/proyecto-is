@@ -9,12 +9,16 @@ router.get('/', (req, res) => {
 
 //Devuelve todas las categorias
 router.get('/store/categories', getAllCategories)
+
 //Devuelve una categoria en base al id. Esta en construccion
 router.get('/store/categories/1', getACategorie)
+
 //Creamos una categoria
 router.post('/store/categories/create', createACategorie)
+
 //Borramos una categoria
 router.delete('/store/categories/delete', deleteACategorie)
+
 //Actualizamos una categoria
 router.put('/store/categories/update', updateACategorie);
 
