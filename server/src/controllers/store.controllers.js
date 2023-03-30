@@ -29,15 +29,42 @@ const createACategorie = async (req, res) => {
 };
 
 const deleteACategorie = (req, res) => {
-  res.send("Borramos una categoria");
+
+  const id = req.params.id;
+  pool.query('DELETE FROM categorias WHERE id_categoria = $1', [id], (error, result1) => {
+    if (error) {
+      return res.status(500).send('Error eliminando categoria: ' + error);
+    }
+      return res.status(200).send(`Eliminado ${result1.rowCount} categoria`);
+  }); 
+  //  res.json(result.rows[0]);
+
+  //res.send("Borramos una categoria");
 };
 
-const updateACategorie = (req, res) => {
-  res.send("Actualizamos una categoria");
+const updateACategorie = async(req, res) => {
+  try {
+    const {id} = req.params;
+  const {name_categorie} = req.body;
+  const newCategorie = await pool.query(
+    "UPDATE categorias SET nombre_categoria = $1 WHERE id_categoria = $2 RETURNING *",
+    [name_categorie, id]
+  );
+
+  if (newCategorie.rows.length === 0)
+      return res.status(404).json({ message: "Categoria no encontrada" });
+
+    return res.json(newCategorie.rows[0]);
+  } catch (error) {
+    console.log("Algo salio mal en la categoria");
+    res.json({ error: error.message });
+  }
+  
+  //res.send("Actualizamos una categoria");
 };
 /*PRODUCTOS*/
 
-const getAllProductsLotes = async (req, res) => {
+const getAllProductsLots = async (req, res) => {
   const result = await pool.query("SELECT * FROM productos,lotes");
 
   console.log(result);
@@ -115,7 +142,7 @@ const updateProduct = async (req, res) => {
   );
 
   if (newProduct.rows.length === 0)
-      return res.status(404).json({ message: "Task not found" });
+      return res.status(404).json({ message: "Producto no encontrado" });
 
     return res.json(newProduct.rows[0]);
   } catch (error) {
@@ -140,7 +167,7 @@ const updateLote = async (req, res) => {
   );
 
   if (newProduct.rows.length === 0)
-      return res.status(404).json({ message: "Task not found" });
+      return res.status(404).json({ message: "Lote no encontrado" });
 
     return res.json(newProduct.rows[0]);
   } catch (error) {
@@ -158,7 +185,7 @@ module.exports = {
   deleteACategorie,
   updateACategorie,
 
-  getAllProductsLotes,
+  getAllProductsLots,
   createProduct,
   createLot,
   deleteProduct,

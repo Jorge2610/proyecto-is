@@ -7,7 +7,7 @@ const {
   createACategorie,
   deleteACategorie,
   updateACategorie,
-  getAllProductsLotes,
+  getAllProductsLots,
   createProduct,
   createLot,
   deleteProduct,
@@ -30,13 +30,13 @@ router.get("/store/categories/1", getACategorie);
 router.post("/store/categories/create", createACategorie);
 
 //Borramos una categoria
-router.delete("/store/categories/delete", deleteACategorie);
+router.delete("/store/categories/delete/:id", deleteACategorie);
 
 //Actualizamos una categoria
-router.put("/store/categories/update", updateACategorie);
+router.put("/store/categories/update/:id", updateACategorie);
 
 //Devuelve todos los productos
-router.get("/store/products", getAllProductsLotes);
+router.get("/store/products", getAllProductsLots);
 //Devuelve un producto
 //router.get('/store/products/1', getProduct)
 //Creamos un producto
