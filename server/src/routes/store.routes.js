@@ -12,6 +12,7 @@ const {
   createLot,
   deleteProduct,
   updateProduct,
+  updateLote,
 } = require("../controllers/store.controllers");
 
 //Ruta por defecto raiz.
@@ -45,6 +46,8 @@ router.post("/store/products/createLot", createLot);
 //Borramos un producto
 router.delete("/store/products/delete/:id/:nameProduct", deleteProduct);
 //Actualizamos un producto
-router.put("/store/products/update", updateProduct);
+router.put("/store/products/update/:id", updateProduct);
+//Actualizamos un lote
+router.put("/store/products/updateLot/:id",updateLote);
 
 module.exports = router;

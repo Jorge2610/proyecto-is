@@ -99,16 +99,57 @@ const deleteProduct = async (req, res) => {
       }
       return res.status(200).send(`Eliminados ${result1.rowCount} registros de lotes y ${result2.rowCount} registros de productos`);
     });
-  });
-  
+  }); 
   //  res.json(result.rows[0]);
  
 };
 
 
 const updateProduct = async (req, res) => {
-  res.send("Actualizamos un producto");
+  try {
+    const {id} = req.params;
+  const {name_product, id_category, description_product } = req.body;
+  const newProduct = await pool.query(
+    "UPDATE productos SET nombre_producto = $1, id_categoria = $2, descripcion = $3 WHERE id_producto = $4 RETURNING *",
+    [name_product, id_category, description_product, id]
+  );
+
+  if (newProduct.rows.length === 0)
+      return res.status(404).json({ message: "Task not found" });
+
+    return res.json(newProduct.rows[0]);
+  } catch (error) {
+    console.log("Algo salio mal");
+    res.json({ error: error.message });
+  }
+  
 };
+
+const updateLote = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const {
+      quantity,
+      unit_cost,
+      unit_price,
+      expiration_date
+    } = req.body;
+    const newProduct = await pool.query(
+    "UPDATE lotes SET cantidad = $1, costo_unitario = $2, precio_unitario = $3, fecha_caducidad = $4 WHERE id_lote = $5 RETURNING *",
+    [quantity, unit_cost, unit_price, expiration_date,id]
+  );
+
+  if (newProduct.rows.length === 0)
+      return res.status(404).json({ message: "Task not found" });
+
+    return res.json(newProduct.rows[0]);
+  } catch (error) {
+    console.log("Algo salio mal");
+    res.json({ error: error.message });
+  }
+};
+
+
 
 module.exports = {
   getAllCategories,
@@ -122,4 +163,5 @@ module.exports = {
   createLot,
   deleteProduct,
   updateProduct,
+  updateLote,
 };
