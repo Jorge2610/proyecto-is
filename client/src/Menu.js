@@ -1,4 +1,4 @@
-import { ShopOutlined } from '@ant-design/icons';
+import { HomeOutlined,ShopOutlined,ContactsOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import './Menu.css';
 
@@ -13,8 +13,11 @@ function getItem(label, key, icon, children, type) {
 }
 const items = [
     getItem('Tienda J&B','tnd',null,[
-        getItem('Inventario', 'g1',<ShopOutlined/>),
-      ],'group')
+      getItem('Home','home',<HomeOutlined />),
+      getItem('Inventario', 'inventario',<ShopOutlined/>),
+      getItem('Proovedores','proovedores',<ContactsOutlined />)    
+      
+    ],'group')
     
 ];
 
@@ -32,6 +35,7 @@ const MenuDesplegable = () => {
       defaultOpenKeys={['sub1']}
       mode="inline"
       items={items}
+      className="menu"
     />
   );
 };
