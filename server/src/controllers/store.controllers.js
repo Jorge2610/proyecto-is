@@ -7,9 +7,17 @@ const getAllCategories = async (req, res) => {
 };
 
 const getACategorie = async (req, res) => {
+  try{
+  const id = req.params.id;
   const result = await pool.query("SELECT * FROM categorias");
   console.log(result);
-  res.json(result.rows[0]);
+  res.json(result.rows[id-1]);
+  if (result.rows.length === 0)
+  return res.status(404).json({ message: "No hay categorias" });
+  } catch (error) {
+    console.log("Algo salio mal");
+    res.json({ error: error.message });
+  }
 };
 
 const createACategorie = async (req, res) => {
@@ -71,7 +79,19 @@ const getAllProductsLots = async (req, res) => {
 
   res.json(result.rows);
 };
-
+const getProduct = async (req, res) => {
+  try{
+  const id = req.params.id;
+  const result = await pool.query("SELECT * FROM productos");
+  console.log(result);
+  res.json(result.rows[id-1]);
+  if (result.rows.length === 0)
+  return res.status(404).json({ message: "No hay productos" });
+  } catch (error) {
+    console.log("Algo salio mal");
+    res.json({ error: error.message });
+  }
+};
 const createProduct = async (req, res) => {
   try {
     const { id_product, name_product, id_category, description_product } =
@@ -186,6 +206,7 @@ module.exports = {
   updateACategorie,
 
   getAllProductsLots,
+  getProduct,
   createProduct,
   createLot,
   deleteProduct,
