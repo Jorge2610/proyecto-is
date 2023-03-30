@@ -5,19 +5,18 @@ import moment from 'moment';
 
 const { TextArea } = Input;
 
-//Lo usamos para guardar los valores de los inputs de los forms
-const values = {
-    imagen: "",
-    nombreProducto: "",
-    cantidad: "",
-    costoUnitario: "",
-    precio: "",
-    categoria: "",
-    fechaCaducidad: "",
-    descripcion: ""
-}
-
 const App = () => {
+
+    const values = {
+        imagen: "",
+        nombreProducto: "",
+        cantidad: "",
+        costoUnitario: "",
+        precio: "",
+        categoria: "",
+        fechaCaducidad: "",
+        descripcion: ""
+    };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,15 +38,18 @@ const App = () => {
         values.categoria = document.getElementById("categoria").value;
         values.fechaCaducidad = document.getElementById("fechaCad").value;
         values.descripcion = document.getElementById("descripcion").value;
-        console.log(values.fechaCaducidad);
+        console.log(values.nombreProducto);
+        console.log(values.descripcion);
     }
 
     const uploadDB = async () => {
-        const res = await fetch("http://localhost:4000/store/categories/1", {
+        console.log(values);
+        console.log(JSON.stringify(values));
+        const res = await fetch("http://localhost:4000/store/products", {
             method: "POST",
             body: JSON.stringify(values),
+            headers: {"Content-Type": "aplication/json; charset=utf-8"}
         });
-
         const data = await res.json();
         console.log(data);
     }
