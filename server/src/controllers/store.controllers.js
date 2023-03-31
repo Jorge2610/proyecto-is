@@ -65,13 +65,36 @@ const updateACategorie = async (req, res) => {
 /*PRODUCTOS*/
 
 const getAllProductsLots = async (req, res) => {
-  const result = await pool.query("SELECT * FROM productos,lotes");
+  try{
+  const result = await pool.query("SELECT DISTINCT ON (productos.nombre_producto) productos.*, lotes.* FROM productos JOIN lotes ON productos.id_producto = lotes.id_producto");
 
   console.log(result);
 
   res.json(result.rows);
+  } catch (err) {
+   console.error(err);
+   res.status(500).send("Error obteniendo los producto");
+  }
 };
-
+const getProduct = async (req, res) => {
+  const idProduct = req.params.id;
+  try {
+    const resultProduct = await pool.query("SELECT * FROM productos WHERE id_producto = $1", [idProduct]);
+    res.json(resultProduct.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error obteniendo el producto");
+  }
+};
+const getLots = async (req, res)=>{
+  const idProduct = req.params.id;
+  try { 
+ const result = await pool.query("SELECT * FROM lotes WHERE id_producto = $1", [idProduct]);
+ res.json(result.rows);
+  }catch (err) {
+    console.error(err);
+    res.status(500).send("Error obteniendo lotes");}
+}
 const createProduct = async (req, res) => {
   try {
     const { nombreProducto, cantidad, costoUnitario, precio, fechaCaducidad, descripcion } =
@@ -98,30 +121,22 @@ const createProduct = async (req, res) => {
   }
 };
 
-
-
 const createLot = async (req, res) => {
   try {
+    const idProduct = req.params.id;
     const {
-      cantidad,
-      costoUnitario,
-      precio,
-      
+      cantidad, 
       fechaCaducidad
     } = req.body;
     const newLot = await pool.query(
-      "INSERT INTO lotes ( id_producto, cantidad, costo_unitario, precio_unitario, fecha_caducidad) VALUES(9, $1, $2, $3, $4) RETURNING *",
-      [cantidad,
-        costoUnitario,
-        precio,
-        fechaCaducidad]
+      "INSERT INTO lotes ( id_producto, cantidad, fecha_caducidad) VALUES($1, $2, $3) RETURNING *",
+      [idProduct, cantidad,fechaCaducidad]
     );
 
-    res.json(newLot.rows[0]);
-    //res.send("Creamos un lote");
+    res.json({ message: "El lote ha sido creado exitosamente", lot: newLot.rows[0] });
   } catch (error) {
-    console.log("El lote del producto ya existe!");
-    res.json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ error: "No se pudo crear el lote. Intente nuevamente más tarde." });
   }
 };
 
@@ -198,6 +213,8 @@ module.exports = {
   deleteACategorie,
   updateACategorie,
   getAllProductsLots,
+  getProduct,
+  getLots,
   createProduct,
   createLot,
   deleteProduct,

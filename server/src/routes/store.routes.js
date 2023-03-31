@@ -8,6 +8,8 @@ const {
   deleteACategorie,
   updateACategorie,
   getAllProductsLots,
+  getProduct,
+  getLots,
   createProduct,
   createLot,
   deleteProduct,
@@ -38,11 +40,13 @@ router.put("/store/categories/update/:id", updateACategorie);
 //Devuelve todos los productos
 router.get("/store/products", getAllProductsLots);
 //Devuelve un producto
-//router.get('/store/products/1', getProduct)
+router.get('/store/products/:id', getProduct);
+//devuelve todos los lotes
+router.get('/store/products/lot/:id', getLots);
 //Creamos un producto
 router.post("/store/products", createProduct);
 //creamos un lote
-router.post("/store/products/createLot", createLot);
+router.post("/store/products/lot/:id", createLot);
 //Borramos un producto
 router.delete("/store/products/delete/:id/:nameProduct", deleteProduct);
 //Actualizamos un producto
