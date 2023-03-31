@@ -48,7 +48,7 @@ const App = () => {
         const res = await fetch("http://localhost:4000/store/products", {
             method: "POST",
             body: JSON.stringify(values),
-            headers: {"Content-Type": "aplication/json; charset=utf-8"}
+            headers: {"Content-Type": "application/json"}
         });
         const data = await res.json();
         console.log(data);
@@ -67,7 +67,7 @@ const App = () => {
                 title="Añadir Producto"
                 style={{
                     top: 0,
-                    left: 695
+                    left: 680
                 }}
                 open={isModalOpen}
                 onOk={handleOk}
