@@ -5,18 +5,19 @@ import moment from 'moment';
 
 const { TextArea } = Input;
 
-const App = () => {
+//Lo usamos para guardar los valores de los inputs de los forms
+const values = {
+    imagen: "",
+    nombreProducto: "",
+    cantidad: "",
+    costoUnitario: "",
+    precio: "",
+    categoria: "",
+    fechaCaducidad: "",
+    descripcion: ""
+}
 
-    const values = {
-        imagen: "",
-        nombreProducto: "",
-        cantidad: "",
-        costoUnitario: "",
-        precio: "",
-        categoria: "",
-        fechaCaducidad: "",
-        descripcion: ""
-    };
+const ModalProducto = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,6 +28,7 @@ const App = () => {
     const handleOk = () => {
         saveData();
         uploadDB();
+        vaciar();
         setIsModalOpen(false);
     };
 
@@ -38,18 +40,25 @@ const App = () => {
         values.categoria = document.getElementById("categoria").value;
         values.fechaCaducidad = document.getElementById("fechaCad").value;
         values.descripcion = document.getElementById("descripcion").value;
-        console.log(values.nombreProducto);
-        console.log(values.descripcion);
+        console.log(values.fechaCaducidad);
+    }
+
+    const vaciar = () => {
+        document.getElementById("nombre").value = "";
+        document.getElementById("cantidad").value = "";
+        document.getElementById("costoU").value = "";
+        document.getElementById("precio").value = "";
+        document.getElementById("categoria").value = "";
+        document.getElementById("fechaCad").value = "";
+        document.getElementById("descripcion").value = "";
     }
 
     const uploadDB = async () => {
-        console.log(values);
-        console.log(JSON.stringify(values));
-        const res = await fetch("http://localhost:4000/store/products", {
+        const res = await fetch("http://localhost:4000/store/categories/1", {
             method: "POST",
             body: JSON.stringify(values),
-            headers: {"Content-Type": "application/json"}
         });
+
         const data = await res.json();
         console.log(data);
     }
@@ -67,7 +76,7 @@ const App = () => {
                 title="Añadir Producto"
                 style={{
                     top: 0,
-                    left: 680
+                    left: 695
                 }}
                 open={isModalOpen}
                 onOk={handleOk}
@@ -96,10 +105,13 @@ const App = () => {
                 <Input id="nombre"
                     placeholder='Inserte nombre del Producto'
                     minLength='3'
+                    maxLength='10'
+                    type='text'
+                    required
                 />
 
                 <p>Cantidad</p>
-                <InputNumber id="cantidad" min={1} defaultValue={1} />
+                <InputNumber type='number' id="cantidad" min={1} defaultValue={1} />
 
                 <p><b>Costo Unitario</b></p>
                 <InputNumber id="costoU" min={0} defaultValue={0} />
@@ -133,4 +145,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default ModalProducto;

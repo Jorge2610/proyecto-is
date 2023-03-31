@@ -1,18 +1,39 @@
-import React from 'react';
+import React, { Children } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './components/Layout'
-import MenuDesplegable from './Menu';
-import FormProductos from './Forms/FormRegistroProducto'
-
 import reportWebVitals from './reportWebVitals';
+import {createBrowserRouter,RouterProvider,Route,Link,Outlet, createRoutesFromElements} from 'react-router-dom';
 
+import ModalProducto from './components/FormProductModal';
+import SideMenu from './components/Layout';
+import Casa from './Home'; 
+import ModalConf from './Modals/ModalConfirmacion'
+
+
+const Inicio = () =>{
+  //Asociar el menu para la navegacion
+  return(
+  <>
+      <SideMenu />
+      <Outlet />
+  </>);
+}
+
+//Construimos las rutas
+const router = createBrowserRouter(createRoutesFromElements(
+    <Route element={<Inicio />}>
+          <Route path='/' element= {<Casa/>} />
+          <Route path='/Inventario' element= {<ModalProducto/>} />
+    </Route>
+
+));
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+     <RouterProvider router={router} className="menu">
+     </RouterProvider>
   </React.StrictMode>
 );
 
