@@ -1,7 +1,7 @@
 import Casa from '../Home.js';
-import ModalProducto from './FormProductModal';
+import ModalProducto from '../Forms/FormProductModal'
 import { ShopOutlined, HomeOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme ,Icon} from 'antd';
+import { Layout, Menu, theme } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 const { Header, Content, Footer, Sider } = Layout;
@@ -17,8 +17,8 @@ function getItem(label, key, icon, link) {
 }
 
 const items = [
-    getItem('Home',"/",<HomeOutlined />),
-    getItem('Inventario','/Inventario', <ShopOutlined /> ),
+    getItem('Home', "/", <HomeOutlined />),
+    getItem('Inventario', '/Inventario', <ShopOutlined />),
 ];
 
 var comp = null;
@@ -28,19 +28,19 @@ const SideMenu = () => {
     //Para poder navegar entre rutas
     const navigate = useNavigate();
 
-    function mostrarComp(key){
+    function mostrarComp(key) {
         console.log(key)
         switch (key) {
             case "/":
-              comp = <Casa />;
-              break;
+                comp = <Casa />;
+                break;
             case "/Inventario":
-              comp = <ModalProducto />;
-              break;
+                comp = <ModalProducto />;
+                break;
             default:
-              comp = null;
-              break;
-          }
+                comp = null;
+                break;
+        }
     }
 
     const [collapsed, setCollapsed] = useState(false);
@@ -56,19 +56,12 @@ const SideMenu = () => {
                 }}
             >
                 <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                    <div
-                        style={{
-                            height: 32,
-                            margin: 16,
-                            backgroundColor: 'rgba(154, 21, 34, 0.1)',
-                        }}
-                    />
-                    <Menu className='menu' theme='dark'  mode="inline" items={items} 
-                          onClick={({key}) =>{navigate(key);mostrarComp(key)}}>
+                    <Menu  mode="inline" items={items}
+                        onClick={({ key }) => { navigate(key); mostrarComp(key) }}>
                     </Menu>
                 </Sider>
 
-                <Layout className="site-layout">
+                <Layout>
                     <Header
                         style={{
                             padding: 0,
@@ -93,6 +86,7 @@ const SideMenu = () => {
                     </Footer>
                 </Layout>
             </Layout>
+        
     );
 };
 export default SideMenu;

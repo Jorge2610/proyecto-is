@@ -2,6 +2,7 @@ import { Button, DatePicker, InputNumber, Input, Select, Upload, Modal } from 'a
 import { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import './FormProductModal.css'
 
 const { TextArea } = Input;
 
@@ -76,11 +77,12 @@ const ModalProducto = () => {
                 title="Añadir Producto"
                 style={{
                     top: 0,
-                    left: 695
+                    left: "37%",
                 }}
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
+                width="25%"
                 footer={[
                     <Button key="create" type="primary" onClick={handleOk}>
                         Crear
@@ -103,24 +105,25 @@ const ModalProducto = () => {
 
                 <p>Nombre del Producto</p>
                 <Input id="nombre"
+                    className="inputs"
                     placeholder='Inserte nombre del Producto'
                     minLength='3'
-                    maxLength='10'
+                    maxLength='40'
                     type='text'
                     required
                 />
 
                 <p>Cantidad</p>
-                <InputNumber type='number' id="cantidad" min={1} defaultValue={1} />
+                <InputNumber className="inputs" type='number' id="cantidad" min={1} defaultValue={1} />
 
-                <p><b>Costo Unitario</b></p>
-                <InputNumber id="costoU" min={0} defaultValue={0} />
+                <p>Costo Unitario</p>
+                <InputNumber className="inputs" id="costoU" min={0} addonBefore="+" addonAfter="Bs" defaultValue={0} />
 
                 <p>Precio</p>
-                <InputNumber id="precio" min={0} defaultValue={0} />
+                <InputNumber className="inputs" id="precio" min={0} addonBefore="+" addonAfter="Bs" defaultValue={0} />
 
                 <p>Seleccionar Categoria</p>
-                <Select id="categoria" placeholder='Seleccione la categoría'
+                <Select className="inputs" id="categoria" placeholder='Seleccione la categoría'
                     value={values.categoria}
 
                 >
@@ -129,6 +132,7 @@ const ModalProducto = () => {
 
                 <p>Fecha de Caducidad</p>
                 <DatePicker id="fechaCad"
+                    className="inputs"
                     placeholder='Inserte la fecha'
                     disabledDate={(current) => {
                         return moment().add(-1, 'days') >= current;
@@ -136,8 +140,9 @@ const ModalProducto = () => {
                 />
 
                 <p>Descripcion</p>
-                <TextArea id="descripcion" rows={3}
+                <TextArea id="descripcion" className="inputs" rows={3}
                     placeholder='Ingrese una descripcion del producto'
+                    maxLength={100}
                 />
 
             </Modal>
