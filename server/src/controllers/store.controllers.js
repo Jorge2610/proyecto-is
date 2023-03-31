@@ -159,6 +159,17 @@ const deleteProduct = async (req, res) => {
 
 };
 
+const deleteLot = async (req, res) => {
+  const idLot = req.params.idLot;
+  try {
+    const result1 = await pool.query('DELETE FROM lotes WHERE id_lote = $1', [idLot]);
+    return res.status(200).send(`Eliminados ${result1.rowCount} registros de lotes`);
+  } catch (error) {
+    return res.status(500).send('Error eliminando lote: ' + error);
+  }
+};
+
+
 
 const updateProduct = async (req, res) => {
   try {
@@ -217,6 +228,7 @@ module.exports = {
   createProduct,
   createLot,
   deleteProduct,
+  deleteLot,
   updateProduct,
   updateLote,
 };

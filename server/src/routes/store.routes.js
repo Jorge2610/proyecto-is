@@ -13,6 +13,7 @@ const {
   createProduct,
   createLot,
   deleteProduct,
+  deleteLot,
   updateProduct,
   updateLote,
 } = require("../controllers/store.controllers");
@@ -49,6 +50,8 @@ router.post("/store/products", createProduct);
 router.post("/store/products/lot/:id", createLot);
 //Borramos un producto
 router.delete("/store/products/delete/:id/:nameProduct", deleteProduct);
+//Borramos un lote
+router.delete("/store/products/deleteLot/:id", deleteLot);
 //Actualizamos un producto
 router.put("/store/products/update/:id", updateProduct);
 //Actualizamos un lote
