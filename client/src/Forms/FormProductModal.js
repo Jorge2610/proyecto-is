@@ -55,11 +55,11 @@ const ModalProducto = () => {
     }
 
     const uploadDB = async () => {
-        const res = await fetch("http://localhost:4000/store/categories/1", {
+        const res = await fetch("http://localhost:4000/store/products", {
             method: "POST",
             body: JSON.stringify(values),
+            headers: {"Content-Type": "application/json"}
         });
-
         const data = await res.json();
         console.log(data);
     }
