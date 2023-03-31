@@ -8,7 +8,6 @@ const {
   deleteACategorie,
   updateACategorie,
   getAllProductsLots,
-  getProduct,
   createProduct,
   createLot,
   deleteProduct,
@@ -25,7 +24,7 @@ router.get("/", (req, res) => {
 router.get("/store/categories", getAllCategories);
 
 //Devuelve una categoria en base al id. Esta en construccion
-router.get("/store/categories/:id", getACategorie);
+router.get("/store/categories/1", getACategorie);
 
 //Creamos una categoria
 router.post("/store/categories/create", createACategorie);
@@ -39,7 +38,7 @@ router.put("/store/categories/update/:id", updateACategorie);
 //Devuelve todos los productos
 router.get("/store/products", getAllProductsLots);
 //Devuelve un producto
-router.get('/store/products/:id', getProduct);
+//router.get('/store/products/1', getProduct)
 //Creamos un producto
 router.post("/store/products", createProduct);
 //creamos un lote

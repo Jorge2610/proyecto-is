@@ -1,5 +1,5 @@
 const pool = require("../db");
-//cambio
+
 const getAllCategories = async (req, res) => {
   const result = await pool.query("SELECT * FROM categorias");
   console.log(result);
@@ -7,17 +7,9 @@ const getAllCategories = async (req, res) => {
 };
 
 const getACategorie = async (req, res) => {
-  try{
-  const id = req.params.id;
   const result = await pool.query("SELECT * FROM categorias");
   console.log(result);
-  res.json(result.rows[id-1]);
-  if (result.rows.length === 0)
-  return res.status(404).json({ message: "No hay categorias" });
-  } catch (error) {
-    console.log("Algo salio mal");
-    res.json({ error: error.message });
-  }
+  res.json(result.rows[0]);
 };
 
 const createACategorie = async (req, res) => {
@@ -79,48 +71,50 @@ const getAllProductsLots = async (req, res) => {
 
   res.json(result.rows);
 };
-const getProduct = async (req, res) => {
-  try{
-  const id = req.params.id;
-  const result = await pool.query("SELECT * FROM productos");
-  console.log(result);
-  res.json(result.rows[id-1]);
-  if (result.rows.length === 0)
-  return res.status(404).json({ message: "No hay productos" });
-  } catch (error) {
-    console.log("Algo salio mal");
-    res.json({ error: error.message });
-  }
-};
+
 const createProduct = async (req, res) => {
   try {
-    const { nombreProducto, cantidad, costoUnitario, precio, categoria, fechaCaducidad, descripcion } =
+    const { nombreProducto, cantidad, costoUnitario, precio, fechaCaducidad, descripcion } =
       req.body;
-    //const newProduct = await pool.query(
-      //"INSERT INTO productos (nombre_producto, id_categoria, descripcion) VALUES($1, $2, $3) RETURNING *",
-      //[nombreProducto, 1, descripcion]);
-    //res.json(newProduct.rows[0]);
-    console.log(req.body);
-    res.json({res: "Creamos un producto"});
+
+    const newProduct = await pool.query(
+      "INSERT INTO productos (nombre_producto, costo_unitario, precio_unitario, id_categoria, descripcion) VALUES ($1, $2, $3, 2, $4) RETURNING *",
+      [nombreProducto, costoUnitario, precio, descripcion]
+    );
+
+    const idPro = (await pool.query("SELECT id_producto FROM productos WHERE nombre_producto = $1", [
+      nombreProducto,
+    ])).rows[0].id_producto;
+
+    const newLot = await pool.query(
+      "INSERT INTO lotes (id_producto, cantidad, fecha_caducidad) VALUES ($1, $2, $3) RETURNING *",
+      [idPro, cantidad, fechaCaducidad]
+    );
+
+    return res.status(200).send(`Añadidos ${newProduct.rowCount} registros de productos y ${newLot.rowCount} registros de lotes`);
   } catch (error) {
     console.log("El producto ya existe!");
-    res.json({ error: error.message });
+    return res.status(500).send('Error añadiendo producto: ' + error);
   }
 };
+
+
 
 const createLot = async (req, res) => {
   try {
     const {
-      id_lot,
-      id_product,
-      quantity,
-      unit_cost,
-      unit_price,
-      expiration_date,
+      cantidad,
+      costoUnitario,
+      precio,
+      
+      fechaCaducidad
     } = req.body;
     const newLot = await pool.query(
-      "INSERT INTO lotes (id_lote, id_producto, cantidad, costo_unitario, precio_unitario, fecha_caducidad) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
-      [id_lot, id_product, quantity, unit_cost, unit_price, expiration_date]
+      "INSERT INTO lotes ( id_producto, cantidad, costo_unitario, precio_unitario, fecha_caducidad) VALUES(9, $1, $2, $3, $4) RETURNING *",
+      [cantidad,
+        costoUnitario,
+        precio,
+        fechaCaducidad]
     );
 
     res.json(newLot.rows[0]);
@@ -204,7 +198,6 @@ module.exports = {
   deleteACategorie,
   updateACategorie,
   getAllProductsLots,
-  getProduct,
   createProduct,
   createLot,
   deleteProduct,

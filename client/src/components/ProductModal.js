@@ -48,10 +48,19 @@ const App = () => {
         const res = await fetch("http://localhost:4000/store/products", {
             method: "POST",
             body: JSON.stringify(values),
-            headers: {"Content-Type": "application/json"}
+            headers: {"Content-Type": "application/json; charset=utf-8",
+            }
+        });
+        const resLot = await fetch("http://localhost:4000/store/products/createLot", {
+            method: "POST",
+            body: JSON.stringify(values),
+            headers: {"Content-Type": "application/json; charset=utf-8",
+            }
         });
         const data = await res.json();
+        const dataLot = await resLot.json();
         console.log(data);
+        console.log(dataLot);
     }
 
     const handleCancel = () => {
@@ -67,7 +76,7 @@ const App = () => {
                 title="Añadir Producto"
                 style={{
                     top: 0,
-                    left: 680
+                    left: 695
                 }}
                 open={isModalOpen}
                 onOk={handleOk}
