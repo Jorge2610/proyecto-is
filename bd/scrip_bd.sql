@@ -6,6 +6,8 @@ CREATE TABLE categorias (
 CREATE TABLE productos (
                 id_producto SERIAL PRIMARY KEY,
                 nombre_producto VARCHAR NOT NULL,
+                costo_unitario REAL NOT NULL,
+                precio_unitario REAL NOT NULL,
                 id_categoria INTEGER,
                 descripcion VARCHAR
 );
@@ -18,9 +20,7 @@ alter table productos
 CREATE TABLE lotes (
                 id_lote SERIAL PRIMARY KEY,
                 id_producto INTEGER,
-                cantidad INTEGER NOT NULL,
-                costo_unitario REAL NOT NULL,
-                precio_unitario REAL NOT NULL,
+                cantidad INTEGER NOT NULL,                
                 fecha_caducidad DATE
 );
 
