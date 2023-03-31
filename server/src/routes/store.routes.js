@@ -49,9 +49,9 @@ router.post("/store/products", createProduct);
 //creamos un lote
 router.post("/store/products/lot/:id", createLot);
 //Borramos un producto
-router.delete("/store/products/delete/:id/:nameProduct", deleteProduct);
+router.delete("/store/products/:id/:nameProduct", deleteProduct);
 //Borramos un lote
-router.delete("/store/products/deleteLot/:id", deleteLot);
+router.delete("/store/products/lot/:id", deleteLot);
 //Actualizamos un producto
 router.put("/store/products/update/:id", updateProduct);
 //Actualizamos un lote

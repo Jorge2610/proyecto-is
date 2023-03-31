@@ -51,16 +51,8 @@ const App = () => {
             headers: {"Content-Type": "application/json; charset=utf-8",
             }
         });
-        const resLot = await fetch("http://localhost:4000/store/products/createLot", {
-            method: "POST",
-            body: JSON.stringify(values),
-            headers: {"Content-Type": "application/json; charset=utf-8",
-            }
-        });
         const data = await res.json();
-        const dataLot = await resLot.json();
         console.log(data);
-        console.log(dataLot);
     }
 
     const handleCancel = () => {
