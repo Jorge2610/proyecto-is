@@ -41,7 +41,7 @@ router.get("/store/products", getAllProductsLots);
 //Devuelve un producto
 router.get('/store/products/:id', getProduct);
 //Creamos un producto
-router.post("/store/products/create", createProduct);
+router.post("/store/products", createProduct);
 //creamos un lote
 router.post("/store/products/createLot", createLot);
 //Borramos un producto

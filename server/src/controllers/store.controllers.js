@@ -43,23 +43,23 @@ const deleteACategorie = (req, res) => {
     if (error) {
       return res.status(500).send('Error eliminando categoria: ' + error);
     }
-      return res.status(200).send(`Eliminado ${result1.rowCount} categoria`);
-  }); 
+    return res.status(200).send(`Eliminado ${result1.rowCount} categoria`);
+  });
   //  res.json(result.rows[0]);
 
   //res.send("Borramos una categoria");
 };
 
-const updateACategorie = async(req, res) => {
+const updateACategorie = async (req, res) => {
   try {
-    const {id} = req.params;
-  const {name_categorie} = req.body;
-  const newCategorie = await pool.query(
-    "UPDATE categorias SET nombre_categoria = $1 WHERE id_categoria = $2 RETURNING *",
-    [name_categorie, id]
-  );
+    const { id } = req.params;
+    const { name_categorie } = req.body;
+    const newCategorie = await pool.query(
+      "UPDATE categorias SET nombre_categoria = $1 WHERE id_categoria = $2 RETURNING *",
+      [name_categorie, id]
+    );
 
-  if (newCategorie.rows.length === 0)
+    if (newCategorie.rows.length === 0)
       return res.status(404).json({ message: "Categoria no encontrada" });
 
     return res.json(newCategorie.rows[0]);
@@ -67,7 +67,7 @@ const updateACategorie = async(req, res) => {
     console.log("Algo salio mal en la categoria");
     res.json({ error: error.message });
   }
-  
+
   //res.send("Actualizamos una categoria");
 };
 /*PRODUCTOS*/
@@ -94,15 +94,14 @@ const getProduct = async (req, res) => {
 };
 const createProduct = async (req, res) => {
   try {
-    const { id_product, name_product, id_category, description_product } =
+    const { nombreProducto, cantidad, costoUnitario, precio, categoria, fechaCaducidad, descripcion } =
       req.body;
-    const newProduct = await pool.query(
-      "INSERT INTO productos (id_producto, nombre_producto, id_categoria, descripcion) VALUES($1, $2, $3, $4) RETURNING *",
-      [id_product, name_product, id_category, description_product]
-    );
-
-    res.json(newProduct.rows[0]);
-    //res.send("Creamos un producto");
+    //const newProduct = await pool.query(
+      //"INSERT INTO productos (nombre_producto, id_categoria, descripcion) VALUES($1, $2, $3) RETURNING *",
+      //[nombreProducto, 1, descripcion]);
+    //res.json(newProduct.rows[0]);
+    console.log(req.body);
+    res.json({res: "Creamos un producto"});
   } catch (error) {
     console.log("El producto ya existe!");
     res.json({ error: error.message });
@@ -133,7 +132,7 @@ const createLot = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-  
+
   const id = req.params.id;
   const nameProducto = req.params.nameProduct;
   pool.query('DELETE FROM lotes WHERE id_producto = $1', [id], (error, result1) => {
@@ -146,22 +145,22 @@ const deleteProduct = async (req, res) => {
       }
       return res.status(200).send(`Eliminados ${result1.rowCount} registros de lotes y ${result2.rowCount} registros de productos`);
     });
-  }); 
+  });
   //  res.json(result.rows[0]);
- 
+
 };
 
 
 const updateProduct = async (req, res) => {
   try {
-    const {id} = req.params;
-  const {name_product, id_category, description_product } = req.body;
-  const newProduct = await pool.query(
-    "UPDATE productos SET nombre_producto = $1, id_categoria = $2, descripcion = $3 WHERE id_producto = $4 RETURNING *",
-    [name_product, id_category, description_product, id]
-  );
+    const { id } = req.params;
+    const { name_product, id_category, description_product } = req.body;
+    const newProduct = await pool.query(
+      "UPDATE productos SET nombre_producto = $1, id_categoria = $2, descripcion = $3 WHERE id_producto = $4 RETURNING *",
+      [name_product, id_category, description_product, id]
+    );
 
-  if (newProduct.rows.length === 0)
+    if (newProduct.rows.length === 0)
       return res.status(404).json({ message: "Producto no encontrado" });
 
     return res.json(newProduct.rows[0]);
@@ -169,12 +168,12 @@ const updateProduct = async (req, res) => {
     console.log("Algo salio mal");
     res.json({ error: error.message });
   }
-  
+
 };
 
 const updateLote = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const {
       quantity,
       unit_cost,
@@ -182,11 +181,11 @@ const updateLote = async (req, res) => {
       expiration_date
     } = req.body;
     const newProduct = await pool.query(
-    "UPDATE lotes SET cantidad = $1, costo_unitario = $2, precio_unitario = $3, fecha_caducidad = $4 WHERE id_lote = $5 RETURNING *",
-    [quantity, unit_cost, unit_price, expiration_date,id]
-  );
+      "UPDATE lotes SET cantidad = $1, costo_unitario = $2, precio_unitario = $3, fecha_caducidad = $4 WHERE id_lote = $5 RETURNING *",
+      [quantity, unit_cost, unit_price, expiration_date, id]
+    );
 
-  if (newProduct.rows.length === 0)
+    if (newProduct.rows.length === 0)
       return res.status(404).json({ message: "Lote no encontrado" });
 
     return res.json(newProduct.rows[0]);
@@ -204,7 +203,6 @@ module.exports = {
   createACategorie,
   deleteACategorie,
   updateACategorie,
-
   getAllProductsLots,
   getProduct,
   createProduct,

@@ -1,12 +1,12 @@
 const { Pool } = require("pg");
-const { db } = require("./config");
+const { db } = require('./config')
 
 const pool = new Pool({
-  user: 'ccdgpnko',
-  password: '4krpBUOBB2BGdgOKabKWYloEfrYulCWg',
-  host: 'babar.db.elephantsql.com',
-  port: 5432,
-  database: 'ccdgpnko',
+  user: db.user,
+  password: db.password,
+  host: db.host,
+  port: db.port,
+  database: db.database,
 });
 
 module.exports = pool;
