@@ -1,5 +1,5 @@
 const pool = require("../db");
-
+//cambio
 const getAllCategories = async (req, res) => {
   const result = await pool.query("SELECT * FROM categorias");
   console.log(result);
