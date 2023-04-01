@@ -1,24 +1,60 @@
-const {Router} = require('express');
-const pool = require('../db')
-
+const { Router } = require("express");
+const pool = require("../db");
 const router = Router();
+const {
+  getAllCategories,
+  getACategorie,
+  createACategorie,
+  deleteACategorie,
+  updateACategorie,
+  getAllProductsLots,
+  getProduct,
+  getLots,
+  createProduct,
+  createLot,
+  deleteProduct,
+  deleteLot,
+  updateProduct,
+  updateLote,
+} = require("../controllers/store.controllers");
 
-router.get('/store', async (req, res) => {
-    const result = await pool.query('SELECT * FROM categorias')
-    console.log(result)
-    res.json('Exito') 
-})
+//Ruta por defecto raiz.
+router.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
-router.post('/store', (req, res) => {
-    res.send('Creating something'); 
-})
+//Devuelve todas las categorias
+router.get("/store/categories", getAllCategories);
 
-router.delete('/store', (req, res) => {
-    res.send('Deleting something');
-})
+//Devuelve una categoria en base al id. Esta en construccion
+router.get("/store/categories/1", getACategorie);
 
-router.put('/store', (req, res) => {
-    res.send('Updating something');
-})
+//Creamos una categoria
+router.post("/store/categories/create", createACategorie);
+
+//Borramos una categoria
+router.delete("/store/categories/delete/:id", deleteACategorie);
+
+//Actualizamos una categoria
+router.put("/store/categories/update/:id", updateACategorie);
+
+//Devuelve todos los productos
+router.get("/store/products", getAllProductsLots);
+//Devuelve un producto
+router.get('/store/products/:id', getProduct);
+//devuelve todos los lotes
+router.get('/store/products/lot/:id', getLots);
+//Creamos un producto
+router.post("/store/products", createProduct);
+//creamos un lote
+router.post("/store/products/lot/:id", createLot);
+//Borramos un producto
+router.delete("/store/products/:id/:nameProduct", deleteProduct);
+//Borramos un lote
+router.delete("/store/products/lot/:id", deleteLot);
+//Actualizamos un producto
+router.put("/store/products/update/:id", updateProduct);
+//Actualizamos un lote
+router.put("/store/products/updateLot/:idLote/:idProducto",updateLote);
 
 module.exports = router;
