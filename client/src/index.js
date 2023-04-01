@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import MenuDesplegable from './Menu';
-import Form from './Form';
 import reportWebVitals from './reportWebVitals';
-import {Button} from 'antd';
+import { BrowserRouter } from 'react-router-dom';
+import App from './components/App'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
-    <MenuDesplegable/>
-    <Button type='primary'>AgregarProducto</Button>
-    <Form/>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
 
