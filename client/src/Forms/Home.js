@@ -1,4 +1,4 @@
-import tienda from './Imagenes/Tienda.jpg';
+import tienda from '../Imagenes/Tienda.jpg';
 import './Home.css';
 
 function Casa(){
