@@ -16,12 +16,16 @@ const {
   deleteLot,
   updateProduct,
   updateLote,
+  getDbTime
 } = require("../controllers/store.controllers");
 
 //Ruta por defecto raiz.
 router.get("/", (req, res) => {
   res.send("Hello World");
 });
+
+//Metodo para testeo
+router.get("/time", getDbTime);
 
 //Devuelve todas las categorias
 router.get("/store/categories", getAllCategories);

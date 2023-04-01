@@ -60,7 +60,7 @@ const ProductModal = () => {
     }
 
     const uploadDB = async () => {
-        const res = await fetch("http://localhost:4000/store/products", {
+        const res = await fetch(`${process.env.REACT_APP_SERVERURL}/store/products`, {
             method: "POST",
             body: JSON.stringify(values),
             headers: { "Content-Type": "application/json" }
