@@ -1,3 +1,4 @@
+const { parse } = require("dotenv");
 const pool = require("../db");
 
 const getAllCategories = async (req, res) => {
@@ -101,12 +102,12 @@ const createProduct = async (req, res) => {
       req.body;
 
     const newProduct = await pool.query(
-      "INSERT INTO productos (nombre_producto, costo_unitario, precio_unitario, id_categoria, descripcion) VALUES ($1, $2, $3, 2, $4) RETURNING *",
-      [nombreProducto, costoUnitario, precio, descripcion]
+      "INSERT INTO productos (nombre_producto, costo_unitario, precio_unitario, id_categoria, descripcion,total) VALUES ($1, $2, $3, 2, $4, $5) RETURNING *",
+      [nombreProducto, costoUnitario, precio, descripcion, cantidad]
     );
 
     const idPro = (await pool.query("SELECT id_producto FROM productos WHERE nombre_producto = $1", [
-      nombreProducto,
+      nombreProducto
     ])).rows[0].id_producto;
 
     const newLot = await pool.query(
@@ -129,9 +130,14 @@ const createLot = async (req, res) => {
       fechaCaducidad
     } = req.body;
     const newLot = await pool.query(
-      "INSERT INTO lotes ( id_producto, cantidad, fecha_caducidad) VALUES($1, $2, $3) RETURNING *",
-      [idProduct, cantidad,fechaCaducidad]
+      "INSERT INTO lotes (id_producto, cantidad, fecha_caducidad) VALUES ($1, $2, $3) RETURNING *",
+      [idProduct, cantidad, fechaCaducidad]
     );
+    const cantTotal = (await pool.query("SELECT total FROM productos WHERE id_producto = $1", [
+      idProduct
+    ])).rows[0].total;
+    const total = parseInt(cantidad) + parseInt(cantTotal);
+    await pool.query("UPDATE productos SET total = $1 WHERE id_producto = $2", [total, idProduct]);
 
     res.json({ message: "El lote ha sido creado exitosamente", lot: newLot.rows[0] });
   } catch (error) {
@@ -139,6 +145,7 @@ const createLot = async (req, res) => {
     res.status(500).json({ error: "No se pudo crear el lote. Intente nuevamente más tarde." });
   }
 };
+
 
 const deleteProduct = async (req, res) => {
 
@@ -172,10 +179,10 @@ const deleteLot = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre_producto, costo_unitario, precio_unitario, id_category, descripcion } = req.body;
+    const { nombre_producto, costo_unitario, precio_unitario, descripcion} = req.body;
     const newProduct = await pool.query(
-      "UPDATE productos SET nombre_producto = $1, costo_unitario = $2, precio_unitario = $3, id_categoria = $4, descripcion = $5 WHERE id_producto = $6 RETURNING *",
-      [nombre_producto, costo_unitario, precio_unitario, id_category, descripcion, id]
+      "UPDATE productos SET nombre_producto = $1, costo_unitario = $2, precio_unitario = $3, descripcion = $4 WHERE id_producto = $5 RETURNING *",
+      [nombre_producto, costo_unitario, precio_unitario, descripcion, id]
     );
 
     if (newProduct.rows.length === 0)
@@ -195,13 +202,20 @@ const updateLote = async (req, res) => {
     const {idProducto} = req.params;
     const {
       cantidad,
-      fecha_caducidad,
+      fecha_caducidad
     } = req.body;
+    const cantlot = (await pool.query("SELECT cantidad FROM lotes WHERE id_lote = $1", [
+      idLote
+    ])).rows[0].cantidad;
     const newProduct = await pool.query(
       "UPDATE lotes SET cantidad = $1, fecha_caducidad = $2 WHERE id_lote = $3 AND id_producto = $4 RETURNING *",
       [cantidad, fecha_caducidad, idLote, idProducto]
     );
-
+    const cantTotal = (await pool.query("SELECT total FROM productos WHERE id_producto = $1", [
+      idProducto
+    ])).rows[0].total;
+    const total = parseInt(cantTotal) - parseInt(cantlot)+parseInt(cantidad);
+    await pool.query("UPDATE productos SET total = $1 WHERE id_producto = $2", [total, idProducto]);
     if (newProduct.rows.length === 0)
       return res.status(404).json({ message: "Lote no encontrado" });
 

@@ -53,8 +53,8 @@ const FormProducto = () => {
                     rules={[{ required: false, }
                     ]}
                 >
-                    {/*<Upload/>*/}
-                    <Upload
+                   { /*<Upload/>*/}
+                   <Upload
                         action="/upload.do"
                         listType="picture-card"
                         maxCount={1}
@@ -65,6 +65,7 @@ const FormProducto = () => {
                             <div style={{ marginTop: 8 }}>Upload</div>
                         </div>
                 </Upload>
+                
                 </Form.Item>
 
                 <Form.Item

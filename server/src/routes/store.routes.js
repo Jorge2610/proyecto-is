@@ -53,8 +53,8 @@ router.delete("/store/products/:id/:nameProduct", deleteProduct);
 //Borramos un lote
 router.delete("/store/products/lot/:id", deleteLot);
 //Actualizamos un producto
-router.put("/store/products/update/:id", updateProduct);
+router.put("/store/products/:id", updateProduct);
 //Actualizamos un lote
-router.put("/store/products/updateLot/:idLote/:idProducto",updateLote);
+router.put("/store/products/lot/:idLote/:idProducto",updateLote);
 
 module.exports = router;
